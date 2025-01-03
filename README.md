@@ -43,6 +43,17 @@ Then, to start the project, execute the following command :
 ````
 npm run dev
 ````
+Once the command has runned succesfully, you can go to this address below in your preferred Browser : 
+
+````
+http://localhost:3008
+````
+_If you encounter any issues with the port not being free on your machine, you can still change it on the bottom of your *Server.js* FIle_
+
+In the section looking like this you can change the 3008 by your preferred port, make shure that the port is free
+````
+app.listen(3008)
+````
 
 If any issues or any disorder please feel free ton redirect to the contact section of this documentation.
 
