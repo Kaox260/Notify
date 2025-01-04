@@ -244,6 +244,28 @@ app.post("/create-post", mustBeLoggedIn, (req, res) => {
 app.post("/register", (req, res) => {
   const errors = []
 
+  if (typeof req.body.username !== "string") req.body.username = ""
+  if (typeof req.body.password !== "string") req.body.password = ""
+
+  req.body.username = req.body.username.trim()
+
+  if (!req.body.username) errors.push("Vous devez fournir un Nom d'Utilisateur.")
+  if (req.body.username && req.body.username.length < 3) errors.push("Le nom d'utilisateur doit faire minimum 3 charactères.")
+  if (req.body.username && req.body.username.length > 10) errors.push("Le nom d'utilisateur ne doit pas dépasser les 10 charactères")
+  if (req.body.username && !req.body.username.match(/^[a-zA-Z0-9]+$/)) errors.push("Le Nom d'Utilisateur peut seulement contenir des chiffres et des lettres !")
+
+  const usernameStatement = db.prepare("SELECT * FROM users WHERE username = ?")
+  const usernameCheck = usernameStatement.get(req.body.username)
+
+  if (usernameCheck) errors.push("Cet utilisateur existe déjà.")
+
+  if (!req.body.password) errors.push("Vous devez fournir un mot de passse...")
+  if (req.body.password && req.body.password.length < 6) errors.push("Le mot de passe doit faire 6 charactères au moins.")
+  if (req.body.password && req.body.password.length > 70) errors.push("Le mot de passe doit faire maximum 70 charactères.")
+
+  if (errors.length) {
+    return res.render("homepage", { errors })
+  }
   if (errors.length) {
     return res.render("homepage", { errors })
   }
